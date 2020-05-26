@@ -1,16 +1,29 @@
 package com.mycompany.ecommerce.resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.mycompany.ecommerce.domain.Category;
 
 @RestController
 @RequestMapping(value="/categories")
 public class CategoryResource {
 
 	@RequestMapping(method=RequestMethod.GET)
-	public String list() {
-		return "REST is working!";
+	public List<Category> list() {
+		
+		Category category1 = new Category(1, "Computing");
+		Category category2 = new Category(2, "Office");
+		
+		List<Category> list = new ArrayList<>();
+		list.add(category1);
+		list.add(category2);
+		
+		return list;
 	}
 	
 }

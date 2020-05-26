@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.mycompany.ecommerce.domain.Category;
 import com.mycompany.ecommerce.repositories.CategoryRepository;
+import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class CategoryService {
@@ -18,8 +19,9 @@ public class CategoryService {
 	public Category search(Integer id) {
 		
 		Optional<Category> category = categoryRepository.findById(id);
-		return category.orElse(null);
-		
+		//return category.orElse(null);
+		return category.orElseThrow(() -> new ObjectNotFoundException(
+				"Objet not found! Id: " + id + ", Type: " + Category.class.getName()));
 	}
 	
 }

@@ -11,7 +11,7 @@ import com.mycompany.ecommerce.repositories.CategoryRepository;
 @Service
 public class CategoryService {
 
-	// --------- Dependency will automatically instantiated by Spring (dependency injection)
+	// --------- Dependency will be automatically instantiated by Spring (dependency injection)
 	@Autowired
 	private CategoryRepository categoryRepository;
 	

@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.mycompany.ecommerce.domain.enums.EClientType;
 
 @Entity
@@ -31,6 +32,7 @@ public class Client implements Serializable{
 	
 	private Integer eClientType;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "client")
 	private List<Address> addresses = new ArrayList<>();
 	

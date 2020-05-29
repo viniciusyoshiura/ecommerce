@@ -12,7 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -40,6 +39,9 @@ public class Client implements Serializable{
 	@ElementCollection
 	@CollectionTable(name = "phone")
 	private Set<String> phones = new HashSet<>();
+	
+	@OneToMany(mappedBy = "client")
+	List<PurchaseOrder> purchaseOrders = new ArrayList<>();
 	
 	public Client () {
 		
@@ -108,6 +110,14 @@ public class Client implements Serializable{
 
 	public void setPhones(Set<String> phones) {
 		this.phones = phones;
+	}
+
+	public List<PurchaseOrder> getPurchaseOrders() {
+		return purchaseOrders;
+	}
+
+	public void setPurchaseOrders(List<PurchaseOrder> purchaseOrders) {
+		this.purchaseOrders = purchaseOrders;
 	}
 
 	@Override

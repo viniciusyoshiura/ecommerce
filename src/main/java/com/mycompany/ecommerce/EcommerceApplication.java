@@ -1,5 +1,6 @@
 package com.mycompany.ecommerce;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +12,20 @@ import com.mycompany.ecommerce.domain.Address;
 import com.mycompany.ecommerce.domain.Category;
 import com.mycompany.ecommerce.domain.City;
 import com.mycompany.ecommerce.domain.Client;
+import com.mycompany.ecommerce.domain.Payment;
+import com.mycompany.ecommerce.domain.PaymentCreditCard;
+import com.mycompany.ecommerce.domain.PaymentSlip;
 import com.mycompany.ecommerce.domain.Product;
+import com.mycompany.ecommerce.domain.PurchaseOrder;
 import com.mycompany.ecommerce.domain.State;
 import com.mycompany.ecommerce.domain.enums.EClientType;
 import com.mycompany.ecommerce.repositories.AddressRepository;
 import com.mycompany.ecommerce.repositories.CategoryRepository;
 import com.mycompany.ecommerce.repositories.CityRepository;
 import com.mycompany.ecommerce.repositories.ClientRepository;
+import com.mycompany.ecommerce.repositories.PaymentRepository;
 import com.mycompany.ecommerce.repositories.ProductRepository;
+import com.mycompany.ecommerce.repositories.PurchaseOrderRepository;
 import com.mycompany.ecommerce.repositories.StateRepository;
 
 @SpringBootApplication
@@ -41,6 +48,12 @@ public class EcommerceApplication implements CommandLineRunner{
 	
 	@Autowired
 	private AddressRepository addressRepository;
+	
+	@Autowired
+	private PurchaseOrderRepository purchaseOrderRepository;
+	
+	@Autowired
+	private PaymentRepository paymentRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
@@ -95,6 +108,23 @@ public class EcommerceApplication implements CommandLineRunner{
 		clientRepository.saveAll(Arrays.asList(client1));
 		
 		addressRepository.saveAll(Arrays.asList(address1, address2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		PurchaseOrder purchaseOrder1 = new PurchaseOrder(null, sdf.parse("18/05/2020 14:23"), client1, address1);
+		PurchaseOrder purchaseOrder2 = new PurchaseOrder(null, sdf.parse("28/05/2020 09:52"), client1, address2);
+		
+		Payment payment1 = new PaymentCreditCard(null, 2, purchaseOrder1, 6);
+		purchaseOrder1.setPayment(payment1);
+		
+		Payment payment2 = new PaymentSlip(null, 1, purchaseOrder2, sdf.parse("05/06/2020 23:59"), null);
+		purchaseOrder2.setPayment(payment2);
+		
+		client1.getPurchaseOrders().addAll(Arrays.asList(purchaseOrder1,purchaseOrder2));
+		
+		purchaseOrderRepository.saveAll(Arrays.asList(purchaseOrder1, purchaseOrder2));
+		
+		paymentRepository.saveAll(Arrays.asList(payment1, payment2));
 	}
 
 	

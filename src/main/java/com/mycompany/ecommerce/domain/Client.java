@@ -45,6 +45,7 @@ public class Client implements Serializable{
 	
 	public Client () {
 		
+		
 	}
 
 	public Client(Integer id, String name, String email, String document, EClientType eClientType) {

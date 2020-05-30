@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 @Entity
 public class PaymentSlip extends Payment {
@@ -13,9 +15,11 @@ public class PaymentSlip extends Payment {
 	// --------- implements serializable not needed, since it inherits from super class
 	private static final long serialVersionUID = 1L;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dueDate;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date payday;
 	

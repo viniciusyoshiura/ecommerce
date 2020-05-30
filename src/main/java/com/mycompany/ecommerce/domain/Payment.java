@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.mycompany.ecommerce.domain.enums.EPaymentState;
 
 // ---------- abstract to assure that Payment cannot be instantiated
@@ -27,6 +28,7 @@ public abstract class Payment implements Serializable{
 	
 	// ---------- One to One relationship with PurchaseOrder
 	// ---------- MapsId assures that order_id is the same as Order.id
+	@JsonBackReference
 	@OneToOne
 	@JoinColumn(name = "purchase_order_id")
 	@MapsId

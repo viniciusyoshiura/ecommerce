@@ -17,6 +17,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class PurchaseOrder implements Serializable{
 
@@ -26,14 +29,17 @@ public class PurchaseOrder implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateOrder;
 	
 	// ---------- One to One relationship with Payment
 	// ---------- Using cascade to avoid Transient error in persistence
+	@JsonManagedReference
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
 	private Payment payment;
 	
+	@JsonManagedReference
 	@ManyToOne
 	@JoinColumn(name = "client_id")
 	private Client client;

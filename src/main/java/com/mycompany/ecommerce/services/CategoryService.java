@@ -24,4 +24,11 @@ public class CategoryService {
 				"Objet not found! Id: " + id + ", Type: " + Category.class.getName()));
 	}
 	
+	public Category insert(Category category) {
+		// ---------- Ensuring that category is a new object
+		category.setId(null);
+		return categoryRepository.save(category);
+	
+	}
+	
 }

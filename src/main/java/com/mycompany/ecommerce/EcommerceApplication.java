@@ -12,6 +12,7 @@ import com.mycompany.ecommerce.domain.Address;
 import com.mycompany.ecommerce.domain.Category;
 import com.mycompany.ecommerce.domain.City;
 import com.mycompany.ecommerce.domain.Client;
+import com.mycompany.ecommerce.domain.ItemPurchaseOrder;
 import com.mycompany.ecommerce.domain.Payment;
 import com.mycompany.ecommerce.domain.PaymentCreditCard;
 import com.mycompany.ecommerce.domain.PaymentSlip;
@@ -23,6 +24,7 @@ import com.mycompany.ecommerce.repositories.AddressRepository;
 import com.mycompany.ecommerce.repositories.CategoryRepository;
 import com.mycompany.ecommerce.repositories.CityRepository;
 import com.mycompany.ecommerce.repositories.ClientRepository;
+import com.mycompany.ecommerce.repositories.ItemPurchaseOrderRepository;
 import com.mycompany.ecommerce.repositories.PaymentRepository;
 import com.mycompany.ecommerce.repositories.ProductRepository;
 import com.mycompany.ecommerce.repositories.PurchaseOrderRepository;
@@ -54,6 +56,9 @@ public class EcommerceApplication implements CommandLineRunner{
 	
 	@Autowired
 	private PaymentRepository paymentRepository;
+	
+	@Autowired
+	private ItemPurchaseOrderRepository itemPurchaseOrderRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceApplication.class, args);
@@ -125,6 +130,19 @@ public class EcommerceApplication implements CommandLineRunner{
 		purchaseOrderRepository.saveAll(Arrays.asList(purchaseOrder1, purchaseOrder2));
 		
 		paymentRepository.saveAll(Arrays.asList(payment1, payment2));
+		
+		ItemPurchaseOrder itemPurchaseOrder1 = new ItemPurchaseOrder(purchaseOrder1, product1, 0.00, 1, 2000.00);
+		ItemPurchaseOrder itemPurchaseOrder2 = new ItemPurchaseOrder(purchaseOrder1, product3, 0.00, 2, 80.00);
+		ItemPurchaseOrder itemPurchaseOrder3 = new ItemPurchaseOrder(purchaseOrder2, product2, 100.00, 1, 800.00);
+		
+		itemPurchaseOrderRepository.saveAll(Arrays.asList(itemPurchaseOrder1, itemPurchaseOrder2, itemPurchaseOrder3));
+		
+		purchaseOrder1.getItemPurchaseOrders().addAll(Arrays.asList(itemPurchaseOrder1, itemPurchaseOrder2));
+		purchaseOrder2.getItemPurchaseOrders().addAll(Arrays.asList(itemPurchaseOrder3));
+		
+		product1.getItemPurchaseOrders().addAll(Arrays.asList(itemPurchaseOrder1));
+		product2.getItemPurchaseOrders().addAll(Arrays.asList(itemPurchaseOrder3));
+		product3.getItemPurchaseOrders().addAll(Arrays.asList(itemPurchaseOrder2));
 	}
 
 	

@@ -25,7 +25,7 @@ public abstract class Payment implements Serializable{
 	
 	private Integer ePaymentState;
 	
-	// ---------- One to One relationship with Order
+	// ---------- One to One relationship with PurchaseOrder
 	// ---------- MapsId assures that order_id is the same as Order.id
 	@OneToOne
 	@JoinColumn(name = "purchase_order_id")

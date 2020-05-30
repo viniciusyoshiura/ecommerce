@@ -2,7 +2,9 @@ package com.mycompany.ecommerce.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -33,7 +36,10 @@ public class Product implements Serializable{
 			inverseJoinColumns = @JoinColumn(name = "category_id")
 			)
 	private List<Category> categories = new ArrayList<>();
-			
+	
+	@OneToMany(mappedBy = "id.product")
+	private Set<ItemPurchaseOrder> itemPurchaseOrders = new HashSet<>();
+	
 	public Product() {
 		
 	}
@@ -45,6 +51,18 @@ public class Product implements Serializable{
 		this.price = price;
 	}
 
+	public List<PurchaseOrder> getPurchaseOrders(){
+		List<PurchaseOrder> purchaseOrders = new ArrayList<>();
+		
+		for(ItemPurchaseOrder itemPurchaseOrder : itemPurchaseOrders) {
+			
+			purchaseOrders.add(itemPurchaseOrder.getPurchaseOrder());
+			
+		}
+		
+		return purchaseOrders;
+	}
+	
 	public Integer getId() {
 		return id;
 	}
@@ -75,6 +93,14 @@ public class Product implements Serializable{
 
 	public void setCategories(List<Category> categories) {
 		this.categories = categories;
+	}
+
+	public Set<ItemPurchaseOrder> getItemPurchaseOrders() {
+		return itemPurchaseOrders;
+	}
+
+	public void setItemPurchaseOrders(Set<ItemPurchaseOrder> itemPurchaseOrders) {
+		this.itemPurchaseOrders = itemPurchaseOrders;
 	}
 
 	@Override

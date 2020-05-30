@@ -2,6 +2,8 @@ package com.mycompany.ecommerce.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -10,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,6 +41,9 @@ public class PurchaseOrder implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "address_id")
 	private Address deliveryAddress;
+	
+	@OneToMany(mappedBy = "id.purchaseOrder")
+	private Set<ItemPurchaseOrder> itemPurchaseOrders = new HashSet<>();
 	
 	public PurchaseOrder() {
 		
@@ -89,6 +95,14 @@ public class PurchaseOrder implements Serializable{
 
 	public void setDeliveryAddress(Address deliveryAddress) {
 		this.deliveryAddress = deliveryAddress;
+	}
+
+	public Set<ItemPurchaseOrder> getItemPurchaseOrders() {
+		return itemPurchaseOrders;
+	}
+
+	public void setItemPurchaseOrders(Set<ItemPurchaseOrder> itemPurchaseOrders) {
+		this.itemPurchaseOrders = itemPurchaseOrders;
 	}
 
 	@Override

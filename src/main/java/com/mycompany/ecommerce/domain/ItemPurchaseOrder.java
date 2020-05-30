@@ -36,6 +36,16 @@ public class ItemPurchaseOrder implements Serializable{
 		this.price = price;
 	}
 
+	@JsonIgnore
+	public PurchaseOrder getPurchaseOrder() {
+		return id.getPurchaseOrder();
+	}
+	
+	@JsonIgnore
+	public Product getProduct() {
+		return id.getProduct();
+	}
+	
 	public ItemPurchaseOrderPk getId() {
 		return id;
 	}
@@ -66,16 +76,6 @@ public class ItemPurchaseOrder implements Serializable{
 
 	public void setPrice(Double price) {
 		this.price = price;
-	}
-	
-	@JsonIgnore
-	public PurchaseOrder getPurchaseOrder() {
-		return id.getPurchaseOrder();
-	}
-	
-	@JsonIgnore
-	public Product getProduct() {
-		return id.getProduct();
 	}
 
 	@Override

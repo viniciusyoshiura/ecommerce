@@ -10,8 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 
 // --------- Serializable: object can be converted into a sequence of bytes
 
@@ -25,8 +23,6 @@ public class Category implements Serializable{
 	private Integer id;
 	private String name;
 	
-	// ---------- JsonManagedReference brings the products from categories
-	@JsonManagedReference
 	@ManyToMany(mappedBy = "categories")
 	private List<Product> products = new ArrayList<>();
 	

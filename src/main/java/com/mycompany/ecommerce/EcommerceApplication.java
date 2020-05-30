@@ -90,12 +90,12 @@ public class EcommerceApplication implements CommandLineRunner{
 		State state1 = new State(null, "São Paulo");
 		State state2 = new State(null, "Minas Gerais");
 		
-		City city1 = new City(null, "Uberlândia", state1);
-		City city2 = new City(null, "São Paulo", state2);
-		City city3 = new City(null, "Ribeirão Preto", state2);
+		City city1 = new City(null, "Uberlândia", state2);
+		City city2 = new City(null, "São Paulo", state1);
+		City city3 = new City(null, "Ribeirão Preto", state1);
 		
-		state1.getCities().addAll(Arrays.asList(city1));
-		state2.getCities().addAll(Arrays.asList(city2, city3));
+		state1.getCities().addAll(Arrays.asList(city2, city3));
+		state2.getCities().addAll(Arrays.asList(city1));
 		
 		stateRepository.saveAll(Arrays.asList(state1, state2));
 		

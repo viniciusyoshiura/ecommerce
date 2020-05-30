@@ -31,4 +31,11 @@ public class CategoryService {
 	
 	}
 	
+	public Category update(Category category) {
+		// ---------- Check if category exists, otherwise throw exception
+		search(category.getId());
+		return categoryRepository.save(category);
+		
+	}
+	
 }

@@ -3,10 +3,12 @@ package com.mycompany.ecommerce.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.ecommerce.domain.Category;
 import com.mycompany.ecommerce.repositories.CategoryRepository;
+import com.mycompany.ecommerce.services.exceptions.DataIntegrityException;
 import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -36,6 +38,20 @@ public class CategoryService {
 		search(category.getId());
 		return categoryRepository.save(category);
 		
+	}
+	
+	public void delete (Integer id) {
+		// ---------- Check if category exists, otherwise throw exception
+		search(id);
+		try {
+			
+		categoryRepository.deleteById(id);
+		
+		} catch(DataIntegrityViolationException e) {
+		
+			throw new DataIntegrityException("It is not possible to delete categories that have products!");
+			
+		}
 	}
 	
 }

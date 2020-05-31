@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.ecommerce.domain.Category;
@@ -61,4 +64,10 @@ public class CategoryService {
 		
 	}
 	
+	public Page<Category> searchWithPagination(Integer page, Integer size, String orderBy, String direction){
+		
+		PageRequest pageRequest = PageRequest.of(page, size, Direction.valueOf(direction),
+				orderBy);
+		return categoryRepository.findAll(pageRequest);
+	}
 }

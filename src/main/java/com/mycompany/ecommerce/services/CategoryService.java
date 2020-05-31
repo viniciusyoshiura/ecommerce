@@ -1,5 +1,6 @@
 package com.mycompany.ecommerce.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,12 @@ public class CategoryService {
 			throw new DataIntegrityException("It is not possible to delete categories that have products!");
 			
 		}
+	}
+	
+	public List<Category> searchAll(){
+		
+		return categoryRepository.findAll();
+		
 	}
 	
 }

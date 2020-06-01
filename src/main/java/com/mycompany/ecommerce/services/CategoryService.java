@@ -19,62 +19,70 @@ import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 @Service
 public class CategoryService {
 
-	// --------- Dependency will be automatically instantiated by Spring (dependency injection)
+	// --------- Dependency will be automatically instantiated by Spring (dependency
+	// injection)
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
 	public Category search(Integer id) {
-		
+
 		Optional<Category> category = categoryRepository.findById(id);
-		//return category.orElse(null);
+		// return category.orElse(null);
 		return category.orElseThrow(() -> new ObjectNotFoundException(
 				"Objet not found! Id: " + id + ", Type: " + Category.class.getName()));
 	}
-	
+
 	public Category insert(Category category) {
 		// ---------- Ensuring that category is a new object
 		category.setId(null);
 		return categoryRepository.save(category);
-	
+
 	}
-	
+
 	public Category update(Category category) {
 		// ---------- Check if category exists, otherwise throw exception
-		search(category.getId());
-		return categoryRepository.save(category);
-		
+		Category newCategory = search(category.getId());
+		// ---------- Update newCategory with category from database
+		updateData(newCategory, category);
+		return categoryRepository.save(newCategory);
+
 	}
-	
-	public void delete (Integer id) {
+
+	public void delete(Integer id) {
 		// ---------- Check if category exists, otherwise throw exception
 		search(id);
 		try {
-			
-		categoryRepository.deleteById(id);
-		
-		} catch(DataIntegrityViolationException e) {
-		
+
+			categoryRepository.deleteById(id);
+
+		} catch (DataIntegrityViolationException e) {
+
 			throw new DataIntegrityException("It is not possible to delete categories that have products!");
-			
+
 		}
 	}
-	
-	public List<Category> searchAll(){
-		
+
+	public List<Category> searchAll() {
+
 		return categoryRepository.findAll();
-		
+
 	}
-	
-	public Page<Category> searchWithPagination(Integer page, Integer size, String orderBy, String direction){
-		
-		PageRequest pageRequest = PageRequest.of(page, size, Direction.valueOf(direction),
-				orderBy);
+
+	public Page<Category> searchWithPagination(Integer page, Integer size, String orderBy, String direction) {
+
+		PageRequest pageRequest = PageRequest.of(page, size, Direction.valueOf(direction), orderBy);
 		return categoryRepository.findAll(pageRequest);
 	}
-	
+
 	public Category fromDto(CategoryDTO categoryDto) {
-		
+
 		return new Category(categoryDto.getId(), categoryDto.getName());
-		
+
+	}
+
+	private void updateData(Category newCategory, Category category) {
+
+		newCategory.setName(category.getName());
+
 	}
 }

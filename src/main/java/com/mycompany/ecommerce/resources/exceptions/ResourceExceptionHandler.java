@@ -23,6 +23,7 @@ public class ResourceExceptionHandler {
 	
 	}
 	
+	// ---------- Occurs when deleting entities with other related entities, e. g.
 	@ExceptionHandler(DataIntegrityException.class)
 	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest request){
 		
@@ -31,6 +32,7 @@ public class ResourceExceptionHandler {
 	
 	}
 	
+	// ---------- Occurs when there are validation erros in synthatic data
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request){
 		

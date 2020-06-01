@@ -24,7 +24,7 @@ public abstract class Payment implements Serializable{
 	@Id
 	private Integer id;
 	
-	private Integer ePaymentState;
+	private Integer status;
 	
 	// ---------- One to One relationship with PurchaseOrder
 	// ---------- MapsId assures that order_id is the same as Order.id
@@ -38,10 +38,10 @@ public abstract class Payment implements Serializable{
 		
 	}
 
-	public Payment(Integer id, Integer ePaymentState, PurchaseOrder purchaseOrder) {
+	public Payment(Integer id, EPaymentState ePaymentState, PurchaseOrder purchaseOrder) {
 		super();
 		this.id = id;
-		this.ePaymentState = ePaymentState;
+		this.status = (ePaymentState == null) ? null : ePaymentState.getCode();
 		this.purchaseOrder = purchaseOrder;
 	}
 
@@ -53,12 +53,12 @@ public abstract class Payment implements Serializable{
 		this.id = id;
 	}
 
-	public EPaymentState getePaymentState() {
-		return EPaymentState.toEnum(ePaymentState);
+	public EPaymentState getStatus() {
+		return EPaymentState.toEnum(status);
 	}
 
-	public void setePaymentState(EPaymentState ePaymentState) {
-		this.ePaymentState = ePaymentState.getCode();
+	public void setStatus(EPaymentState ePaymentState) {
+		this.status = ePaymentState.getCode();
 	}
 
 

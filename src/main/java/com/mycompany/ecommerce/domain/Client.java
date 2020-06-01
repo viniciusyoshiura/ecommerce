@@ -29,7 +29,7 @@ public class Client implements Serializable{
 	private String email;
 	private String document;
 	
-	private Integer eClientType;
+	private Integer type;
 	
 	@OneToMany(mappedBy = "client")
 	private List<Address> addresses = new ArrayList<>();
@@ -55,7 +55,7 @@ public class Client implements Serializable{
 		this.name = name;
 		this.email = email;
 		this.document = document;
-		this.eClientType = eClientType.getCode();
+		this.type = (eClientType == null) ? null : eClientType.getCode();
 	}
 
 	public Integer getId() {
@@ -90,12 +90,12 @@ public class Client implements Serializable{
 		this.document = document;
 	}
 
-	public EClientType geteClientType() {
-		return EClientType.toEnum(eClientType);
+	public EClientType getType() {
+		return EClientType.toEnum(type);
 	}
 
-	public void seteClientType(EClientType eClientType) {
-		this.eClientType = eClientType.getCode();
+	public void setType(EClientType eClientType) {
+		this.type = eClientType.getCode();
 	}
 
 	public List<Address> getAddresses() {

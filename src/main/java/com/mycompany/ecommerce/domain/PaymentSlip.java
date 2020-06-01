@@ -7,6 +7,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mycompany.ecommerce.domain.enums.EPaymentStatus;
 
 
 @Entity
@@ -27,8 +28,8 @@ public class PaymentSlip extends Payment {
 		
 	}
 
-	public PaymentSlip(Integer id, Integer ePaymentState, PurchaseOrder order, Date dueDate, Date payday) {
-		super(id, ePaymentState, order);
+	public PaymentSlip(Integer id, EPaymentStatus ePaymentStatus, PurchaseOrder order, Date dueDate, Date payday) {
+		super(id, ePaymentStatus, order);
 		this.dueDate = dueDate;
 		this.payday = payday;
 	}

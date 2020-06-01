@@ -1,6 +1,6 @@
 package com.mycompany.ecommerce.domain.enums;
 
-public enum EPaymentState {
+public enum EPaymentStatus {
 
 	PENDING (1, "Pending"), 
 	SETTLED (2, "Settled"), 
@@ -9,7 +9,7 @@ public enum EPaymentState {
 	private Integer code;
 	private String description;
 	
-	private EPaymentState(Integer code, String description) {
+	private EPaymentStatus(Integer code, String description) {
 		this.code = code;
 		this.description = description;
 	}
@@ -22,13 +22,13 @@ public enum EPaymentState {
 		return description;
 	}
 	
-	public static EPaymentState toEnum(Integer code) {
+	public static EPaymentStatus toEnum(Integer code) {
 		
 		if(code == null) {
 			return null;
 		}
 		
-		for(EPaymentState ePaymentState : EPaymentState.values()) {
+		for(EPaymentStatus ePaymentState : EPaymentStatus.values()) {
 			
 			if(code.equals(ePaymentState.getCode())) {
 				return ePaymentState;

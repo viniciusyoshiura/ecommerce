@@ -11,7 +11,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mycompany.ecommerce.domain.enums.EPaymentState;
+import com.mycompany.ecommerce.domain.enums.EPaymentStatus;
 
 // ---------- abstract to assure that Payment cannot be instantiated
 // ---------- to instantiate, it is necessary to use subclasses
@@ -38,7 +38,7 @@ public abstract class Payment implements Serializable{
 		
 	}
 
-	public Payment(Integer id, EPaymentState ePaymentState, PurchaseOrder purchaseOrder) {
+	public Payment(Integer id, EPaymentStatus ePaymentState, PurchaseOrder purchaseOrder) {
 		super();
 		this.id = id;
 		this.status = (ePaymentState == null) ? null : ePaymentState.getCode();
@@ -53,11 +53,11 @@ public abstract class Payment implements Serializable{
 		this.id = id;
 	}
 
-	public EPaymentState getStatus() {
-		return EPaymentState.toEnum(status);
+	public EPaymentStatus getStatus() {
+		return EPaymentStatus.toEnum(status);
 	}
 
-	public void setStatus(EPaymentState ePaymentState) {
+	public void setStatus(EPaymentStatus ePaymentState) {
 		this.status = ePaymentState.getCode();
 	}
 

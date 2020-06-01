@@ -20,6 +20,7 @@ import com.mycompany.ecommerce.domain.Product;
 import com.mycompany.ecommerce.domain.PurchaseOrder;
 import com.mycompany.ecommerce.domain.State;
 import com.mycompany.ecommerce.domain.enums.EClientType;
+import com.mycompany.ecommerce.domain.enums.EPaymentStatus;
 import com.mycompany.ecommerce.repositories.AddressRepository;
 import com.mycompany.ecommerce.repositories.CategoryRepository;
 import com.mycompany.ecommerce.repositories.CityRepository;
@@ -135,10 +136,11 @@ public class EcommerceApplication implements CommandLineRunner {
 		PurchaseOrder purchaseOrder1 = new PurchaseOrder(null, sdf.parse("18/05/2020 14:23"), client1, address1);
 		PurchaseOrder purchaseOrder2 = new PurchaseOrder(null, sdf.parse("28/05/2020 09:52"), client1, address2);
 
-		Payment payment1 = new PaymentCreditCard(null, 2, purchaseOrder1, 6);
+		Payment payment1 = new PaymentCreditCard(null, EPaymentStatus.SETTLED, purchaseOrder1, 6);
 		purchaseOrder1.setPayment(payment1);
 
-		Payment payment2 = new PaymentSlip(null, 1, purchaseOrder2, sdf.parse("05/06/2020 23:59"), null);
+		Payment payment2 = new PaymentSlip(null, EPaymentStatus.PENDING, purchaseOrder2, sdf.parse("05/06/2020 23:59"),
+				null);
 		purchaseOrder2.setPayment(payment2);
 
 		client1.getPurchaseOrders().addAll(Arrays.asList(purchaseOrder1, purchaseOrder2));

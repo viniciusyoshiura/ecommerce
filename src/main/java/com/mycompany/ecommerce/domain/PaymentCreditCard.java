@@ -2,6 +2,8 @@ package com.mycompany.ecommerce.domain;
 
 import javax.persistence.Entity;
 
+import com.mycompany.ecommerce.domain.enums.EPaymentStatus;
+
 
 @Entity
 public class PaymentCreditCard extends Payment {
@@ -15,8 +17,8 @@ public class PaymentCreditCard extends Payment {
 		
 	}
 
-	public PaymentCreditCard(Integer id, Integer ePaymentState, PurchaseOrder order, Integer installmentNumber) {
-		super(id, ePaymentState, order);
+	public PaymentCreditCard(Integer id, EPaymentStatus ePaymentStatus, PurchaseOrder order, Integer installmentNumber) {
+		super(id, ePaymentStatus, order);
 		this.installmentNumber = installmentNumber;
 	}
 

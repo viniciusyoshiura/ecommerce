@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.ecommerce.domain.Category;
+import com.mycompany.ecommerce.dto.CategoryDTO;
 import com.mycompany.ecommerce.repositories.CategoryRepository;
 import com.mycompany.ecommerce.services.exceptions.DataIntegrityException;
 import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
@@ -69,5 +70,11 @@ public class CategoryService {
 		PageRequest pageRequest = PageRequest.of(page, size, Direction.valueOf(direction),
 				orderBy);
 		return categoryRepository.findAll(pageRequest);
+	}
+	
+	public Category fromDto(CategoryDTO categoryDto) {
+		
+		return new Category(categoryDto.getId(), categoryDto.getName());
+		
 	}
 }

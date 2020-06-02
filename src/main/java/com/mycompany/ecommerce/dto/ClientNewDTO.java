@@ -2,22 +2,50 @@ package com.mycompany.ecommerce.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.mycompany.ecommerce.services.validation.ClientInsert;
+
+
+// ---------- @ClientInsert: custom annotation for fields validation
+@ClientInsert
 public class ClientNewDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
-
+	
+	@NotEmpty(message = "Required field")
+	@Length(min = 5, max=120, message = "The length must be between 5 and 120 characters")
 	private String name;
+	
+	@NotEmpty(message = "Required field")
+	@Email(message = "Invalid email")
 	private String email;
+	
+	@NotEmpty(message = "Required field")
 	private String document;
+	
+	// ---------- @NotEmpt does not apply to Integer
+	// ---------- See ClientInsertValidator class
 	private Integer type;
 	
+	@NotEmpty(message = "Required field")
 	private String street;
+	
+	@NotEmpty(message = "Required field")
 	private String number;
+	
 	private String complement;
 	private String district;
+	
+	@NotEmpty(message = "Required field")
 	private String zipCode;
 	
+	@NotEmpty(message = "Required field")
 	private String phone1;
+	
 	private String phone2;
 	private String phone3;
 	

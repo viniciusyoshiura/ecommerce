@@ -16,6 +16,7 @@ import com.mycompany.ecommerce.repositories.CategoryRepository;
 import com.mycompany.ecommerce.services.exceptions.DataIntegrityException;
 import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 
+// --------- BLL Layer for Category
 @Service
 public class CategoryService {
 

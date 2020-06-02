@@ -9,6 +9,7 @@ import com.mycompany.ecommerce.domain.PurchaseOrder;
 import com.mycompany.ecommerce.repositories.PurchaseOrderRepository;
 import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 
+// ---------- BLL Layer for PurchaseOrder
 @Service
 public class PurchaseOrderService {
 

@@ -3,6 +3,7 @@ package com.mycompany.ecommerce.resources.exceptions;
 import java.util.ArrayList;
 import java.util.List;
 
+// ---------- This class sets and gets list of erros (FieldMessage)
 public class ValidationError extends StandardError{
 
 	private static final long serialVersionUID = 1L;

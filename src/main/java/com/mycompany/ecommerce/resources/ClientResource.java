@@ -1,5 +1,6 @@
 package com.mycompany.ecommerce.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.mycompany.ecommerce.domain.Client;
 import com.mycompany.ecommerce.dto.ClientDTO;
+import com.mycompany.ecommerce.dto.ClientNewDTO;
 import com.mycompany.ecommerce.services.ClientService;
 
 @RestController
@@ -33,6 +36,18 @@ public class ClientResource {
 		
 		return ResponseEntity.ok(client);
 		
+	}
+	
+	// ---------- @Valid - validate clientDTO fields
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClientNewDTO clientNewDTO) {
+		
+		Client client = clientService.fromDto(clientNewDTO);
+		client = clientService.insert(client);
+		// ---------- Create URI for get REQUEST
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(client.getId())
+				.toUri();
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -77,4 +92,5 @@ public class ClientResource {
 		
 		return ResponseEntity.ok(clientsDto);
 	}
+	
 }

@@ -6,14 +6,21 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.mycompany.ecommerce.domain.Client;
 import com.mycompany.ecommerce.domain.enums.EClientType;
 import com.mycompany.ecommerce.dto.ClientNewDTO;
+import com.mycompany.ecommerce.repositories.ClientRepository;
 import com.mycompany.ecommerce.resources.exceptions.FieldMessage;
 import com.mycompany.ecommerce.services.validation.utils.DocumentUtil;
 
 // ---------- ConstraintValidator <ValidationClass, Destination Validation Class
 public class ClientInsertValidator implements ConstraintValidator<ClientInsert, ClientNewDTO> {
 
+	@Autowired
+	ClientRepository clientRepository;
+	
 	@Override
 	public void initialize(ClientInsert ann) {
 
@@ -44,7 +51,14 @@ public class ClientInsertValidator implements ConstraintValidator<ClientInsert, 
 			list.add(new FieldMessage("document", "LEGALPERSON document is null and/or is invalid"));
 			
 		}
-
+		
+		// ---------- Checking email
+		Client aux = clientRepository.findByEmail(clientNewDTO.getEmail());
+		if(aux != null) {
+			list.add(new FieldMessage("email", "Email already exists"));
+		}
+				
+		
 		// ---------- Include the tests here, by inserting errors on the list
 		for (FieldMessage e : list) {
 			context.disableDefaultConstraintViolation();

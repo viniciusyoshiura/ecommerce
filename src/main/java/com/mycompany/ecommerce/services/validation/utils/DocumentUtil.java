@@ -34,7 +34,7 @@ public class DocumentUtil {
     /**
      * Validates CPF
      *
-     * @param ssn
+     * @param cpf
      * @return
      */
     public static boolean isValidCPF(String cpf) {
@@ -45,7 +45,7 @@ public class DocumentUtil {
     /**
      * Validates CNPJ
      *
-     * @param tfn
+     * @param cnpj
      * @return
      */
     public static boolean isValidCNPJ(String cnpj) {

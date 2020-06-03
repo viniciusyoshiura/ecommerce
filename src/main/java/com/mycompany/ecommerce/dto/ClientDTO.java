@@ -8,7 +8,10 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.mycompany.ecommerce.domain.Client;
+import com.mycompany.ecommerce.services.validation.ClientUpdate;
 
+// ---------- @ClientUpate: custom annotation for fields validation in update
+@ClientUpdate
 public class ClientDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;

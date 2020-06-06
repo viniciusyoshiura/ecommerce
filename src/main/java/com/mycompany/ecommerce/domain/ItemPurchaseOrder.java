@@ -78,6 +78,13 @@ public class ItemPurchaseOrder implements Serializable{
 		this.price = price;
 	}
 
+	public double getSubTotal() {
+		
+		return (this.price - this.discount) * this.quantity;
+				
+		
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

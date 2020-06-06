@@ -175,7 +175,7 @@ public class EcommerceApplication implements CommandLineRunner {
 
 		paymentRepository.saveAll(Arrays.asList(payment1, payment2));
 
-		ItemPurchaseOrder itemPurchaseOrder1 = new ItemPurchaseOrder(purchaseOrder1, product1, 0.00, 1, 2000.00);
+		ItemPurchaseOrder itemPurchaseOrder1 = new ItemPurchaseOrder(purchaseOrder1, product1, 20.00, 1, 2000.00);
 		ItemPurchaseOrder itemPurchaseOrder2 = new ItemPurchaseOrder(purchaseOrder1, product3, 0.00, 2, 80.00);
 		ItemPurchaseOrder itemPurchaseOrder3 = new ItemPurchaseOrder(purchaseOrder2, product2, 100.00, 1, 800.00);
 

@@ -108,6 +108,18 @@ public class PurchaseOrder implements Serializable{
 		this.itemPurchaseOrders = itemPurchaseOrders;
 	}
 
+	public double getTotalValue() {
+		
+		double sum = 0.0;
+		for(ItemPurchaseOrder itemPurchaseOrder : itemPurchaseOrders) {
+			
+			sum += itemPurchaseOrder.getSubTotal();
+			
+		}
+	
+		return sum;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

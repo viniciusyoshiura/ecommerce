@@ -36,6 +36,9 @@ public class PurchaseOrderService {
 	@Autowired
 	private ItemPurchaseOrderRepository itemPurchaseOrderRepository;
 	
+	@Autowired
+	private ClientService clientService;
+	
 	public PurchaseOrder search(Integer id) {
 		
 		Optional<PurchaseOrder> purchaseOrder = purchaseOrderRepository.findById(id);
@@ -50,6 +53,7 @@ public class PurchaseOrderService {
 		// --------- Assuring thas is a new object
 		purchaseOrder.setId(null);
 		purchaseOrder.setDateOrder(new Date());
+		purchaseOrder.setClient(clientService.search(purchaseOrder.getClient().getId()));
 		purchaseOrder.getPayment().setStatus(EPaymentStatus.PENDING);
 		purchaseOrder.getPayment().setPurchaseOrder(purchaseOrder);
 		
@@ -68,11 +72,13 @@ public class PurchaseOrderService {
 		for(ItemPurchaseOrder itemPurchaseOrder : purchaseOrder.getItemPurchaseOrders()) {
 			
 			itemPurchaseOrder.setDiscount(itemPurchaseOrder.getDiscount());
-			itemPurchaseOrder.setPrice(productService.search(itemPurchaseOrder.getProduct().getId()).getPrice());
+			itemPurchaseOrder.setProduct(productService.search(itemPurchaseOrder.getProduct().getId()));
+			itemPurchaseOrder.setPrice(itemPurchaseOrder.getProduct().getPrice());
 			itemPurchaseOrder.setPurchaseOrder(purchaseOrder);
 		}
 		
 		itemPurchaseOrderRepository.saveAll(purchaseOrder.getItemPurchaseOrders());
+		System.out.println(purchaseOrder);
 		return purchaseOrder;
 	}
 	

@@ -7,10 +7,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.mycompany.ecommerce.domain.enums.EPaymentStatus;
 
 
+//---------- JsonTypeName: which name to show in JSON. See Payment.class
 @Entity
+@JsonTypeName("paymentSlip")
 public class PaymentSlip extends Payment {
 	
 	// --------- implements serializable not needed, since it inherits from super class

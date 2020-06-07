@@ -52,6 +52,7 @@ public class Product implements Serializable{
 		this.price = price;
 	}
 
+	@JsonIgnore
 	public List<PurchaseOrder> getPurchaseOrders(){
 		List<PurchaseOrder> purchaseOrders = new ArrayList<>();
 		
@@ -96,7 +97,6 @@ public class Product implements Serializable{
 		this.categories = categories;
 	}
 
-	@JsonIgnore
 	public Set<ItemPurchaseOrder> getItemPurchaseOrders() {
 		return itemPurchaseOrders;
 	}

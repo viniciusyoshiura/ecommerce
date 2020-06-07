@@ -11,12 +11,15 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.mycompany.ecommerce.domain.enums.EPaymentStatus;
 
 // ---------- abstract to assure that Payment cannot be instantiated
 // ---------- to instantiate, it is necessary to use subclasses
+// ---------- @JsonTypeInfo: when instantiating JSON, identify which subclass was used
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Payment implements Serializable{
 
 	private static final long serialVersionUID = 1L;

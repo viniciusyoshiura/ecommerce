@@ -41,9 +41,20 @@ public class ItemPurchaseOrder implements Serializable{
 		return id.getPurchaseOrder();
 	}
 	
-	@JsonIgnore
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+		
+		id.setPurchaseOrder(purchaseOrder);
+		
+	}
+	
 	public Product getProduct() {
 		return id.getProduct();
+	}
+	
+	public void setProduct(Product product) {
+		
+		id.setProduct(product);
+		
 	}
 	
 	public ItemPurchaseOrderPk getId() {

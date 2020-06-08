@@ -39,6 +39,9 @@ public class PurchaseOrderService {
 	@Autowired
 	private ClientService clientService;
 	
+	@Autowired
+	private EmailService emailService;
+	
 	public PurchaseOrder search(Integer id) {
 		
 		Optional<PurchaseOrder> purchaseOrder = purchaseOrderRepository.findById(id);
@@ -78,7 +81,9 @@ public class PurchaseOrderService {
 		}
 		
 		itemPurchaseOrderRepository.saveAll(purchaseOrder.getItemPurchaseOrders());
-		System.out.println(purchaseOrder);
+		
+		emailService.sendOrderConfirmationEmail(purchaseOrder);
+		
 		return purchaseOrder;
 	}
 	

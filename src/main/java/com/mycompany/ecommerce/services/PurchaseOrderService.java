@@ -82,7 +82,11 @@ public class PurchaseOrderService {
 		
 		itemPurchaseOrderRepository.saveAll(purchaseOrder.getItemPurchaseOrders());
 		
-		emailService.sendOrderConfirmationEmail(purchaseOrder);
+		// ---------- Normal email
+		//emailService.sendOrderConfirmationEmail(purchaseOrder);
+		
+		// ---------- HTML email
+		emailService.sendOrderConfirmationHtmlEmail(purchaseOrder);
 		
 		return purchaseOrder;
 	}

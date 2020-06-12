@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.mycompany.ecommerce.domain.Address;
@@ -59,6 +60,9 @@ public class DBService {
 
 	@Autowired
 	private ItemPurchaseOrderRepository itemPurchaseOrderRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	public void instantiateTestDatabase() throws ParseException {
 		
@@ -134,8 +138,9 @@ public class DBService {
 
 		cityRepository.saveAll(Arrays.asList(city1, city2, city3));
 
+		// ---------- Enconced password
 		Client client1 = new Client(null, "Maria Silva", "test@klefv.com", "611.904.270-95",
-				EClientType.PHYSICALPERSON);
+				EClientType.PHYSICALPERSON, bCryptPasswordEncoder.encode("12345678a"));
 
 		client1.getPhones().addAll(Arrays.asList("999999999", "111111111"));
 

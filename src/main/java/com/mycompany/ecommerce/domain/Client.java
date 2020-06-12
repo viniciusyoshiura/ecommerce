@@ -36,6 +36,10 @@ public class Client implements Serializable{
 	
 	private Integer type;
 	
+	// ---------- Does not show password on JSON
+	@JsonIgnore
+	private String password;
+	
 	// ---------- CascadeType.ALL: when a client is deleted, all addresses must be deleted
 	@OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
 	private List<Address> addresses = new ArrayList<>();
@@ -55,13 +59,14 @@ public class Client implements Serializable{
 		
 	}
 
-	public Client(Integer id, String name, String email, String document, EClientType eClientType) {
+	public Client(Integer id, String name, String email, String document, EClientType eClientType, String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.document = document;
 		this.type = (eClientType == null) ? null : eClientType.getCode();
+		this.password = password;
 	}
 
 	public Integer getId() {
@@ -104,6 +109,14 @@ public class Client implements Serializable{
 		this.type = eClientType.getCode();
 	}
 
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
 	public List<Address> getAddresses() {
 		return addresses;
 	}

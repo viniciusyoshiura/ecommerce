@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +20,7 @@ import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mycompany.ecommerce.domain.enums.EClientType;
+import com.mycompany.ecommerce.domain.enums.EProfile;
 
 @Entity
 public class Client implements Serializable{
@@ -54,8 +57,15 @@ public class Client implements Serializable{
 	@OneToMany(mappedBy = "client")
 	List<PurchaseOrder> purchaseOrders = new ArrayList<>();
 	
+	// ---------Using Set to avoid repetitions
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "profiles")
+	private Set<Integer> profiles = new HashSet<>();
+	
+	// ---------- Assuring that every new client has a Client Profile
 	public Client () {
 		
+		addProfile(EProfile.CLIENT);
 		
 	}
 
@@ -67,6 +77,7 @@ public class Client implements Serializable{
 		this.document = document;
 		this.type = (eClientType == null) ? null : eClientType.getCode();
 		this.password = password;
+		addProfile(EProfile.CLIENT);
 	}
 
 	public Integer getId() {
@@ -115,6 +126,16 @@ public class Client implements Serializable{
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	// ---------- Return client profiles
+	public Set<EProfile> getProfiles(){
+		
+		return profiles.stream().map(x -> EProfile.toEnum(x)).collect(Collectors.toSet());
+	}
+	
+	public void addProfile(EProfile eProfile) {
+		profiles.add(eProfile.getCode());
 	}
 	
 	public List<Address> getAddresses() {

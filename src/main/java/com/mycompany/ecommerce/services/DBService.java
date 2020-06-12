@@ -21,6 +21,7 @@ import com.mycompany.ecommerce.domain.PurchaseOrder;
 import com.mycompany.ecommerce.domain.State;
 import com.mycompany.ecommerce.domain.enums.EClientType;
 import com.mycompany.ecommerce.domain.enums.EPaymentStatus;
+import com.mycompany.ecommerce.domain.enums.EProfile;
 import com.mycompany.ecommerce.repositories.AddressRepository;
 import com.mycompany.ecommerce.repositories.CategoryRepository;
 import com.mycompany.ecommerce.repositories.CityRepository;
@@ -141,19 +142,28 @@ public class DBService {
 		// ---------- Enconced password
 		Client client1 = new Client(null, "Maria Silva", "test@klefv.com", "611.904.270-95",
 				EClientType.PHYSICALPERSON, bCryptPasswordEncoder.encode("12345678a"));
-
 		client1.getPhones().addAll(Arrays.asList("999999999", "111111111"));
-
+		
+		// ---------- Creating admin 
+		Client client2 = new Client(null, "João Gomes", "gomes@klefv.com", "596.467.260-46",
+				EClientType.PHYSICALPERSON, bCryptPasswordEncoder.encode("12345678a"));
+		client2.addProfile(EProfile.ADMIN);
+		client2.getPhones().addAll(Arrays.asList("981088935", "38055541"));
+		
+		
 		Address address1 = new Address(null, "Avenida João Dias", "2046", "Prédio 2", "Santo Amaro", "04724-003",
 				client1, city2);
 		Address address2 = new Address(null, "Rua Othay Ribeiro de Azambuja Neto", "184", "Chácara Green Valley",
 				"Shopping Park", "04724-003", client1, city1);
-
+		Address address3 = new Address(null, "Alameda dos Jurupis", "1005", "AP 33",
+				"Indianópolis", "04088-907", client2, city2);
+		
 		client1.getAddresses().addAll(Arrays.asList(address1, address2));
+		client2.getAddresses().addAll(Arrays.asList(address3));
+		
+		clientRepository.saveAll(Arrays.asList(client1, client2));
 
-		clientRepository.saveAll(Arrays.asList(client1));
-
-		addressRepository.saveAll(Arrays.asList(address1, address2));
+		addressRepository.saveAll(Arrays.asList(address1, address2, address3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 

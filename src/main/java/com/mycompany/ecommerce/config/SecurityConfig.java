@@ -19,6 +19,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.mycompany.ecommerce.security.JWTAuthenticationFilter;
+import com.mycompany.ecommerce.security.JWTAuthorizationFilter;
 import com.mycompany.ecommerce.security.JWTUtils;
 
 // ---------- source: https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
@@ -37,10 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	@Autowired
 	private JWTUtils jwtUtils;
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
@@ -60,17 +61,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// ---------- Authorizing routes from PUBLIC_MATCHERS
 		// ---------- Authorizing GET routes from PUBLIC_MATCHERS_GET
 		// ---------- For all others endpoints, request authentication
-		http.authorizeRequests()
-			.antMatchers(PUBLIC_MATCHERS).permitAll()
-			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
-			.anyRequest().authenticated();
+		http.authorizeRequests().antMatchers(PUBLIC_MATCHERS).permitAll()
+				.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll().anyRequest().authenticated();
 
 		// ---------- This application will not store user SESSIONS
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		
+
 		// ---------- Adding JWTAuthentication filter
 		// ---------- authenticationManager() is available in WebSecurityConfigurerAdapter
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtils));
+
+		// ---------- Adding JWTAuthorization filter
+		// ---------- authenticationManager() is available in WebSecurityConfigurerAdapter
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtils, userDetailsService));
 	}
 
 	// ---------- Overriding Spring Authentication
@@ -78,10 +81,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		// ---------- Setting who is the service and who is the encoder
-		// ---------- Spring searches from userDetailsService implementation, since it is an interface
+		// ---------- Spring searches from userDetailsService implementation, since it
+		// is an interface
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
-	
+
 	// ---------- Allowing basic access for all endpoints
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
@@ -89,14 +93,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
 		return source;
 	}
-	
+
 	// ---------- Configuration for encrypting password
 	// ---------- Can be injected in any class
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		
+
 		return new BCryptPasswordEncoder();
-		
+
 	}
 
 }

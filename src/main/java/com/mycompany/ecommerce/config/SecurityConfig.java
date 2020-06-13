@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -25,14 +26,19 @@ import com.mycompany.ecommerce.security.JWTUtils;
 // ---------- source: https://auth0.com/blog/implementing-jwt-authentication-on-spring-boot/
 // ---------- Security configuration
 // ---------- Set allowed enpoints
+// ---------- @EnableGlobalMethodSecurity allows pre-authorization annotations (@PreAuthorize)
+// ---------- See CategoryResource for example
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] PUBLIC_MATCHERS = { "/h2-console/**" };
 
-	private static final String[] PUBLIC_MATCHERS_GET = { "/products/**", "/categories/**", "/clients/**" };
+	private static final String[] PUBLIC_MATCHERS_GET = { "/products/**", "/categories/**"};
 
+	private static final String[] PUBLIC_MATCHERS_POST = { "/clients/**"};
+	
 	@Autowired
 	private Environment environment;
 
@@ -60,9 +66,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// ---------- Authorizing routes from PUBLIC_MATCHERS
 		// ---------- Authorizing GET routes from PUBLIC_MATCHERS_GET
+		// ---------- Authorizing POST routes from PUBLIC_MATCHERS_POST
 		// ---------- For all others endpoints, request authentication
-		http.authorizeRequests().antMatchers(PUBLIC_MATCHERS).permitAll()
-				.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll().anyRequest().authenticated();
+		http.authorizeRequests()
+				.antMatchers(PUBLIC_MATCHERS).permitAll()
+				.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+				.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
+				.anyRequest().authenticated();
 
 		// ---------- This application will not store user SESSIONS
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

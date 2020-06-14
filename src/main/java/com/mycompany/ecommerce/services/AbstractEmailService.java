@@ -1,3 +1,4 @@
+
 package com.mycompany.ecommerce.services;
 
 import java.util.Date;
@@ -13,6 +14,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import com.mycompany.ecommerce.domain.Client;
 import com.mycompany.ecommerce.domain.PurchaseOrder;
 
 public abstract class AbstractEmailService implements EmailService {
@@ -74,5 +76,26 @@ public abstract class AbstractEmailService implements EmailService {
 		mimeMessageHelper.setText(htmlFromTemplatePurchaseOrder(purchaseOrder), true);
 
 		return mimeMessage;
+	}
+	
+	@Override
+	public void sendNewPasswordEmail(Client client, String newPassword) {
+		
+		SimpleMailMessage simpleMailMessage = prepareNewPassword(client, newPassword);
+		sendEmail(simpleMailMessage);
+		
+	}
+
+	
+	protected SimpleMailMessage prepareNewPassword(Client client, String newPassword) {
+		
+		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+		simpleMailMessage.setTo(client.getEmail());
+		simpleMailMessage.setFrom(sender);
+		simpleMailMessage.setSubject("New password request");
+		simpleMailMessage.setSentDate(new Date(System.currentTimeMillis()));
+		simpleMailMessage.setText("New password: " + newPassword);
+
+		return simpleMailMessage;
 	}
 }

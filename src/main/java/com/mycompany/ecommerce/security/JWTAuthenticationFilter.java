@@ -76,7 +76,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	// ---------- Since Spring Security returns 403
 	// ---------- Customizing when authentication failure
 	private class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
-		
+	
 		// ---------- Customizing when authentication failure
 		@Override
 		public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,

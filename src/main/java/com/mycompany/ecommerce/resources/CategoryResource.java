@@ -39,8 +39,8 @@ public class CategoryResource {
 
 	// ---------- @Valid - validate categoryDTO fields
 	// ---------- @PreAuthorize - only admin has access
-	@RequestMapping(method = RequestMethod.POST)
 	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoryDTO categoryDto) {
 		
 		Category category = categoryService.fromDto(categoryDto);

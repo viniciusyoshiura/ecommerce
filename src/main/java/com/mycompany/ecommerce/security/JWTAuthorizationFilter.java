@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,7 +26,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	// ---------- UserDetailService to check if token is valid
 	public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTUtils jwtUtils,
 			UserDetailsService userDetailService) {
-
 		super(authenticationManager);
 		this.jwtUtils = jwtUtils;
 		this.userDetailService = userDetailService;
@@ -36,14 +36,15 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	// ---------- Intercepts request before continuing
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
+			throws IOException, ServletException, AccessDeniedException {
 
 		// ---------- Getting Authorization (token) from header request
 		String authorizationHeader = request.getHeader("Authorization");
-		
+
 		// ---------- Checking if token is valid
 		if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-			// ---------- Check if token is valid and returns UsernamePasswordAuthenticationToken from Spring Security
+			// ---------- Check if token is valid and returns
+			// UsernamePasswordAuthenticationToken from Spring Security
 			// ---------- Token is value after "Bearer"
 			UsernamePasswordAuthenticationToken auth = getAuthentication(authorizationHeader.substring(7));
 			if (auth != null) {
@@ -52,7 +53,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 			}
 		}
 		// ---------- Continue request
-		chain.doFilter(request, response);
+		try {
+			chain.doFilter(request, response);
+		} catch (AccessDeniedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private UsernamePasswordAuthenticationToken getAuthentication(String token) {
@@ -63,5 +68,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		}
 		return null;
 	}
-	
+
+
 }

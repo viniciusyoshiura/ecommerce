@@ -15,10 +15,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.mycompany.ecommerce.resources.exceptions.CustomAccessDeniedHandler;
 import com.mycompany.ecommerce.security.JWTAuthenticationFilter;
 import com.mycompany.ecommerce.security.JWTAuthorizationFilter;
 import com.mycompany.ecommerce.security.JWTUtils;
@@ -63,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// ---------- If there is a corsConfigurationSource(), apply them
 		// ---------- Disabling csrf, since this is a stateless application
 		http.cors().and().csrf().disable();
-
+		
 		// ---------- Authorizing routes from PUBLIC_MATCHERS
 		// ---------- Authorizing GET routes from PUBLIC_MATCHERS_GET
 		// ---------- Authorizing POST routes from PUBLIC_MATCHERS_POST
@@ -84,6 +86,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// ---------- Adding JWTAuthorization filter
 		// ---------- authenticationManager() is available in WebSecurityConfigurerAdapter
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtils, userDetailsService));
+		
+		// ---------- Exception Handlers
+		http.exceptionHandling().accessDeniedHandler(accessDeniedHandler());
 	}
 
 	// ---------- Overriding Spring Authentication
@@ -111,6 +116,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		return new BCryptPasswordEncoder();
 
+	}
+	
+	// ---------- Configuration for handling AccessDeniedException
+	@Bean
+	public AccessDeniedHandler accessDeniedHandler(){
+	    return new CustomAccessDeniedHandler();
 	}
 
 }

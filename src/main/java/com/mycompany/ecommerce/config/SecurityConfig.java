@@ -119,6 +119,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 	
 	// ---------- Configuration for handling AccessDeniedException
+	// Source: https://www.baeldung.com/spring-security-custom-access-denied-page
 	@Bean
 	public AccessDeniedHandler accessDeniedHandler(){
 	    return new CustomAccessDeniedHandler();

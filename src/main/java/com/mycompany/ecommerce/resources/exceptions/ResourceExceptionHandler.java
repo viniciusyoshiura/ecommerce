@@ -9,9 +9,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.mycompany.ecommerce.services.exceptions.AuthorizationException;
 import com.mycompany.ecommerce.services.exceptions.DataIntegrityException;
 import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 
+// ---------- Steps of customizing exceptions:
+// ---------- Step 1: Create exception extending RuntimeException (see ObjectNotFoundException)
+// ---------- Step 2: Create, if necessary, class to set values, messages etc. (see StandardError or ValidationError)
+// ---------- Step 3: Create method ResourceExceptionHandler
+// ---------- Step 4: Set standard error class and response 
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
@@ -45,6 +51,14 @@ public class ResourceExceptionHandler {
 		}
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
+	
+	}
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request){
+		
+		StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN.value()).body(err);
 	
 	}
 }

@@ -82,4 +82,11 @@ public class UserSS implements UserDetails {
 		return true;
 	}
 
+	public boolean hasRole(EProfile profile) {
+		
+		// ---------- new SimpleGrantedAuthority: converts profile description to GrantedAuthority 
+		return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
+		
+	}
+	
 }

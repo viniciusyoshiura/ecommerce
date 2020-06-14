@@ -140,12 +140,12 @@ public class DBService {
 		cityRepository.saveAll(Arrays.asList(city1, city2, city3));
 
 		// ---------- Enconced password
-		Client client1 = new Client(null, "Maria Silva", "test@klefv.com", "611.904.270-95",
+		Client client1 = new Client(null, "Maria Silva", "maria_client@klefv.com", "611.904.270-95",
 				EClientType.PHYSICALPERSON, bCryptPasswordEncoder.encode("12345678a"));
 		client1.getPhones().addAll(Arrays.asList("999999999", "111111111"));
 		
 		// ---------- Creating admin 
-		Client client2 = new Client(null, "João Gomes", "gomes@klefv.com", "596.467.260-46",
+		Client client2 = new Client(null, "João Gomes", "gomes_admin@klefv.com", "596.467.260-46",
 				EClientType.PHYSICALPERSON, bCryptPasswordEncoder.encode("12345678a"));
 		client2.addProfile(EProfile.ADMIN);
 		client2.getPhones().addAll(Arrays.asList("981088935", "38055541"));

@@ -15,10 +15,13 @@ import com.mycompany.ecommerce.domain.Address;
 import com.mycompany.ecommerce.domain.City;
 import com.mycompany.ecommerce.domain.Client;
 import com.mycompany.ecommerce.domain.enums.EClientType;
+import com.mycompany.ecommerce.domain.enums.EProfile;
 import com.mycompany.ecommerce.dto.ClientDTO;
 import com.mycompany.ecommerce.dto.ClientNewDTO;
 import com.mycompany.ecommerce.repositories.AddressRepository;
 import com.mycompany.ecommerce.repositories.ClientRepository;
+import com.mycompany.ecommerce.security.UserSS;
+import com.mycompany.ecommerce.services.exceptions.AuthorizationException;
 import com.mycompany.ecommerce.services.exceptions.DataIntegrityException;
 import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 
@@ -38,6 +41,12 @@ public class ClientService {
 	
 	public Client search(Integer id) {
 
+		UserSS user = UserService.authenticated();
+		if(user == null || !user.hasRole(EProfile.ADMIN) && !id.equals(user.getId())) {
+			throw new AuthorizationException("Access denied");
+		}
+		
+		
 		Optional<Client> client = clientRepository.findById(id);
 		// return client.orElse(null);
 		return client.orElseThrow(

@@ -6,8 +6,12 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
+import com.mycompany.ecommerce.domain.Client;
 import com.mycompany.ecommerce.domain.ItemPurchaseOrder;
 import com.mycompany.ecommerce.domain.PaymentSlip;
 import com.mycompany.ecommerce.domain.PurchaseOrder;
@@ -15,6 +19,8 @@ import com.mycompany.ecommerce.domain.enums.EPaymentStatus;
 import com.mycompany.ecommerce.repositories.ItemPurchaseOrderRepository;
 import com.mycompany.ecommerce.repositories.PaymentRepository;
 import com.mycompany.ecommerce.repositories.PurchaseOrderRepository;
+import com.mycompany.ecommerce.security.UserSS;
+import com.mycompany.ecommerce.services.exceptions.AuthorizationException;
 import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 
 // ---------- BLL Layer for PurchaseOrder
@@ -91,4 +97,16 @@ public class PurchaseOrderService {
 		return purchaseOrder;
 	}
 	
+	public Page<PurchaseOrder> searchWithPagination(Integer page, Integer size, String orderBy, String direction) {
+	
+		// ---------- Getting and checking user authenticated
+		UserSS user = UserService.authenticated();
+		if(user == null) {
+			throw new AuthorizationException("Access denied");
+		}
+		PageRequest pageRequest = PageRequest.of(page, size, Direction.valueOf(direction), orderBy);
+		
+		Client client =  clientService.search(user.getId());
+		return purchaseOrderRepository.findByClient(client, pageRequest);
+	}
 }

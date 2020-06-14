@@ -19,7 +19,7 @@ import com.mycompany.ecommerce.domain.PurchaseOrder;
 import com.mycompany.ecommerce.services.PurchaseOrderService;
 
 @RestController
-@RequestMapping(value="/purchaseOrders")
+@RequestMapping(value="/purchase_orders")
 public class PurchaseOrderResource {
 
 	@Autowired

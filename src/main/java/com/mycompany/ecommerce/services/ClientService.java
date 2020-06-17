@@ -1,5 +1,6 @@
 package com.mycompany.ecommerce.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.mycompany.ecommerce.domain.Address;
 import com.mycompany.ecommerce.domain.City;
@@ -38,6 +40,9 @@ public class ClientService {
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	public Client search(Integer id) {
 
@@ -133,5 +138,9 @@ public class ClientService {
 		newClient.setName(client.getName());
 		newClient.setEmail(client.getEmail());
 
+	}
+	
+	public URI uploadImageProfile(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 }

@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] PUBLIC_MATCHERS_GET = { "/products/**", "/categories/**"};
 
-	private static final String[] PUBLIC_MATCHERS_POST = { "/clients/**", "/auth/forgot/**"};
+	private static final String[] PUBLIC_MATCHERS_POST = { "/clients", "/clients/image", "/auth/forgot/**"};
 	
 	@Autowired
 	private Environment environment;

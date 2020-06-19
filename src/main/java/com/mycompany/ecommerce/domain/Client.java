@@ -62,6 +62,7 @@ public class Client implements Serializable{
 	@CollectionTable(name = "profiles")
 	private Set<Integer> profiles = new HashSet<>();
 	
+	
 	// ---------- Assuring that every new client has a Client Profile
 	public Client () {
 		

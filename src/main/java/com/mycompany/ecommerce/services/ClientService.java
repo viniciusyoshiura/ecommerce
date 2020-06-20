@@ -53,6 +53,10 @@ public class ClientService {
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
 	
+	//  --------- Getting standard file size from application.properties
+	@Value("${img.profile.size}")
+	private Integer size;
+	
 	public Client search(Integer id) {
 
 		UserSS user = UserService.authenticated();
@@ -157,6 +161,8 @@ public class ClientService {
 		}
 		
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
 		
 		String fileName = prefix + user.getId() + ".jpg";
 		

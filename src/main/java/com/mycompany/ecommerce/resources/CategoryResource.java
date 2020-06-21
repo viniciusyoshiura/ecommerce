@@ -22,13 +22,19 @@ import com.mycompany.ecommerce.domain.Category;
 import com.mycompany.ecommerce.dto.CategoryDTO;
 import com.mycompany.ecommerce.services.CategoryService;
 
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 @RestController
 @RequestMapping(value = "/categories")
 public class CategoryResource {
 
 	@Autowired
 	private CategoryService categoryService;
-
+	
+	// ---------- @ApiOperation shows the route description in Swagger
+	@ApiOperation(value="Search by id")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 
@@ -37,8 +43,10 @@ public class CategoryResource {
 		return ResponseEntity.ok(category);
 	}
 
+	// ---------- @ApiOperation shows the route description in Swagger
 	// ---------- @Valid - validate categoryDTO fields
 	// ---------- @PreAuthorize - only admin has access
+	@ApiOperation(value="Inserts category")
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoryDTO categoryDto) {
@@ -51,6 +59,8 @@ public class CategoryResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	// ---------- @ApiOperation shows the route description in Swagger
+	@ApiOperation(value="Update category")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Void> update(@PathVariable Integer id, @Valid @RequestBody CategoryDTO categoryDto) {
@@ -63,6 +73,12 @@ public class CategoryResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	// ---------- @ApiOperation shows the route description in Swagger
+	// ---------- @@ApiResponses custom response messages in Swagger
+	@ApiOperation(value="Delete category")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = "You cannot delete a category that has products"),
+			@ApiResponse(code = 404, message = "Code does not exist") })
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
@@ -72,6 +88,8 @@ public class CategoryResource {
 		return ResponseEntity.noContent().build();
 	}
 
+	// ---------- @ApiOperation shows the route description in Swagger
+	@ApiOperation(value="Get all categories")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<CategoryDTO>> findAll() {
 
@@ -82,6 +100,8 @@ public class CategoryResource {
 		return ResponseEntity.ok(categoriesDTO);
 	}
 
+	// ---------- @ApiOperation shows the route description in Swagger
+	@ApiOperation(value="Get all categories using pagination")
 	@RequestMapping(value = "/pagination", method = RequestMethod.GET)
 	public ResponseEntity<Page<CategoryDTO>> findWithPaginaton(
 			@RequestParam(name = "page", defaultValue = "0") Integer page,

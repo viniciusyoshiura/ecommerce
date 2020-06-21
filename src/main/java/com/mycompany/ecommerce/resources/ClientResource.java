@@ -40,6 +40,12 @@ public class ClientResource {
 		
 	}
 	
+	@RequestMapping(value="/email", method=RequestMethod.GET)
+	public ResponseEntity<Client> find(@RequestParam(value="value") String email) {
+		Client client = clientService.searchByEmail(email);
+		return ResponseEntity.ok().body(client);
+	}
+	
 	// ---------- @Valid - validate clientDTO fields
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody ClientNewDTO clientNewDTO) {

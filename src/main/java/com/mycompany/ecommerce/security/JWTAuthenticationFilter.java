@@ -69,6 +69,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		String token = jwtUtils.generateToken(username);
 		// ---------- Generating token and adding into header response
 		res.addHeader("Authorization", "Bearer " + token);
+		// ---------- Exposing header authorization, for CORS
+		res.addHeader("access-control-expose-headers", "Authorization");
 
 	}
 

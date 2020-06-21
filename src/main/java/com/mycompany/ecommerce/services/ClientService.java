@@ -29,7 +29,6 @@ import com.mycompany.ecommerce.services.exceptions.AuthorizationException;
 import com.mycompany.ecommerce.services.exceptions.DataIntegrityException;
 import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 
-
 // ---------- BLL Layer for client
 @Service
 public class ClientService {
@@ -39,32 +38,31 @@ public class ClientService {
 
 	@Autowired
 	private AddressRepository addressRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-	
+
 	@Autowired
 	private S3Service s3Service;
-	
+
 	@Autowired
 	private ImageService imageService;
-	
+
 	// ---------- Getting value from application.properties
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
-	
-	//  --------- Getting standard file size from application.properties
+
+	// --------- Getting standard file size from application.properties
 	@Value("${img.profile.size}")
 	private Integer size;
-	
+
 	public Client search(Integer id) {
 
 		UserSS user = UserService.authenticated();
-		if(user == null || !user.hasRole(EProfile.ADMIN) && !id.equals(user.getId())) {
+		if (user == null || !user.hasRole(EProfile.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Access denied");
 		}
-		
-		
+
 		Optional<Client> client = clientRepository.findById(id);
 		// return client.orElse(null);
 		return client.orElseThrow(
@@ -109,6 +107,20 @@ public class ClientService {
 
 	}
 
+	public Client searchByEmail(String email) {
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(EProfile.ADMIN) && !email.equals(user.getUsername())) {
+			throw new AuthorizationException("Access denied");
+		}
+
+		Client client = clientRepository.findByEmail(email);
+		if (client == null) {
+			throw new ObjectNotFoundException(
+					"Object not found! Id: " + user.getId() + ", Type: " + Client.class.getName());
+		}
+		return client;
+	}
+
 	public Page<Client> searchWithPagination(Integer page, Integer size, String orderBy, String direction) {
 
 		PageRequest pageRequest = PageRequest.of(page, size, Direction.valueOf(direction), orderBy);
@@ -122,7 +134,7 @@ public class ClientService {
 	}
 
 	public Client fromDto(ClientNewDTO clientNewDTO) {
-		
+
 		// ---------- Encoded password
 		Client client = new Client(null, clientNewDTO.getName(), clientNewDTO.getEmail(), clientNewDTO.getDocument(),
 				EClientType.toEnum(clientNewDTO.getType()), bCryptPasswordEncoder.encode(clientNewDTO.getPassword()));
@@ -131,18 +143,18 @@ public class ClientService {
 
 		Address address = new Address(null, clientNewDTO.getStreet(), clientNewDTO.getNumber(),
 				clientNewDTO.getComplement(), clientNewDTO.getDistrict(), clientNewDTO.getZipCode(), client, city);
-		
+
 		client.getAddresses().add(address);
 		client.getPhones().add(clientNewDTO.getPhone1());
 
-		if(clientNewDTO.getPhone2() != null) {
+		if (clientNewDTO.getPhone2() != null) {
 			client.getPhones().add(clientNewDTO.getPhone2());
 		}
-		
-		if(clientNewDTO.getPhone3() != null) {
+
+		if (clientNewDTO.getPhone3() != null) {
 			client.getPhones().add(clientNewDTO.getPhone3());
 		}
-		
+
 		return client;
 	}
 
@@ -152,21 +164,21 @@ public class ClientService {
 		newClient.setEmail(client.getEmail());
 
 	}
-	
+
 	public URI uploadImageProfile(MultipartFile multipartFile) {
-		
+
 		UserSS user = UserService.authenticated();
-		if(user == null) {
+		if (user == null) {
 			throw new AuthorizationException("Access denied");
 		}
-		
+
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
 		jpgImage = imageService.cropSquare(jpgImage);
 		jpgImage = imageService.resize(jpgImage, size);
-		
+
 		String fileName = prefix + user.getId() + ".jpg";
-		
+
 		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
-		
+
 	}
 }

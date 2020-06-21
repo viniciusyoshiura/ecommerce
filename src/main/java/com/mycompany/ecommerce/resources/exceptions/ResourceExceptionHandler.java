@@ -26,75 +26,71 @@ import com.mycompany.ecommerce.services.exceptions.ObjectNotFoundException;
 public class ResourceExceptionHandler {
 
 	@ExceptionHandler(ObjectNotFoundException.class)
-	public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request){
-		
-		StandardError err = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage(), System.currentTimeMillis());
-		return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(err);
-	
+	public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(),
+				"Not found", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 	}
-	
-	// ---------- Occurs when deleting entities with other related entities, e. g.
+
 	@ExceptionHandler(DataIntegrityException.class)
-	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest request){
-		
-		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
-	
+	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"Data integrity", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
-	
-	// ---------- Occurs when there are validation erros in synthatic data
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request){
-		
-		ValidationError err = new ValidationError(HttpStatus.BAD_REQUEST.value(), "Validation error", System.currentTimeMillis());
-		
-		for(FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-			
-			err.addError(fieldError.getField(), fieldError.getDefaultMessage());
-			
+	public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
+
+		// ---------- HttpStatus Code 422: UNPROCESSABLE_ENTITY
+		ValidationError err = new ValidationError(System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(),
+				"Validation error", e.getMessage(), request.getRequestURI());
+		for (FieldError x : e.getBindingResult().getFieldErrors()) {
+			err.addError(x.getField(), x.getDefaultMessage());
 		}
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
-	
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(err);
 	}
-	
+
 	@ExceptionHandler(AuthorizationException.class)
-	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request){
-		
-		StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage(), System.currentTimeMillis());
-		return ResponseEntity.status(HttpStatus.FORBIDDEN.value()).body(err);
-	
+	public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), "Access denied",
+				e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
 	}
-	
+
 	@ExceptionHandler(FileException.class)
-	public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request){
-		
-		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
-	
+	public ResponseEntity<StandardError> file(FileException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"File error", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
-	
+
 	@ExceptionHandler(AmazonServiceException.class)
-	public ResponseEntity<StandardError> amazonService(AmazonServiceException e, HttpServletRequest request){
+	public ResponseEntity<StandardError> amazonService(AmazonServiceException e, HttpServletRequest request) {
+
 		HttpStatus code = HttpStatus.valueOf(e.getErrorCode());
-		StandardError err = new StandardError(code.value(), e.getMessage(), System.currentTimeMillis());
-		return ResponseEntity.status(code.value()).body(err);
-	
+		StandardError err = new StandardError(System.currentTimeMillis(), code.value(), "Amazon Service error",
+				e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(code).body(err);
 	}
-	
+
 	@ExceptionHandler(AmazonClientException.class)
-	public ResponseEntity<StandardError> amazonClient(AmazonClientException e, HttpServletRequest request){
-		
-		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
-	
+	public ResponseEntity<StandardError> amazonClient(AmazonClientException e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
+				"Amazon Client error", e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
-	
+
 	@ExceptionHandler(AmazonS3Exception.class)
-	public ResponseEntity<StandardError> amazonS3(AmazonS3Exception e, HttpServletRequest request){
-		
-		StandardError err = new StandardError(HttpStatus.BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis());
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(err);
-	
+	public ResponseEntity<StandardError> amazonS3(AmazonS3Exception e, HttpServletRequest request) {
+
+		StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "S3 error",
+				e.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
 	}
 }

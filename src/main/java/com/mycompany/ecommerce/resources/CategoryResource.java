@@ -34,7 +34,7 @@ public class CategoryResource {
 	private CategoryService categoryService;
 	
 	// ---------- @ApiOperation shows the route description in Swagger
-	@ApiOperation(value="Search by id")
+	@ApiOperation(value="Find by id")
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> find(@PathVariable Integer id) {
 

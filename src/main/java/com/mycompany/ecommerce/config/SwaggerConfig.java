@@ -79,7 +79,7 @@ public class SwaggerConfig {
 		
 		return new ResponseMessageBuilder()
 		.code(201)
-		.message("Recurso criado")
+		.message("Created resource")
 		.headersWithDescription(map)
 		.build();
 	}

@@ -3,10 +3,12 @@ package com.mycompany.ecommerce.services;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.stereotype.Service;
 
 import com.mycompany.ecommerce.domain.Client;
 import com.mycompany.ecommerce.domain.PurchaseOrder;
 
+@Service
 public interface EmailService {
 
 	void sendOrderConfirmationEmail(PurchaseOrder purchaseOrder);

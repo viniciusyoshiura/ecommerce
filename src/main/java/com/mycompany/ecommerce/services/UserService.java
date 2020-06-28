@@ -1,10 +1,12 @@
 package com.mycompany.ecommerce.services;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import com.mycompany.ecommerce.security.UserSS;
 
 // ---------- BLL layer for User
+@Service
 public class UserService {
 	
 	// ---------- Returns user authenticated

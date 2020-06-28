@@ -18,7 +18,6 @@ import org.thymeleaf.context.Context;
 import com.mycompany.ecommerce.domain.Client;
 import com.mycompany.ecommerce.domain.PurchaseOrder;
 
-@Service
 public abstract class AbstractEmailService implements EmailService {
 
 	@Value("${default.sender}")
